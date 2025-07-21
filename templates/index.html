@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>gillu ka news channel</title>
+</head>
+<form>
+<input type="text" name="publication" placeholder="search" />
+<input type="submit" value="Submit" />
+</form>
+<body>
+    <h1>Latest Headlines</h1>
+
+    {% if articles %}
+        {% for article in articles %}
+            <div style="margin-bottom: 30px;">
+                <h2>{{ article.title }}</h2>
+                <small><i>{{ article.published }}</i></small><br />
+                <p>{{ article.summary }}</p>
+                {% if article.link %}
+                    <a href="{{ article.link }}" target="_blank">Read more</a>
+                {% endif %}
+                <hr />
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No news available.</p>
+    {% endif %}
+</body>
+</html>
