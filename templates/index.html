@@ -1,29 +1,62 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <title>gillu ka news channel</title>
+    <title>News & Weather</title>
+    <style>
+        html {
+            font-family: "Helvetica";
+            background: white;
+        }
+        body {
+            background: lightgrey;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        #header {
+            background: lightsteelblue;
+            padding: 10px;
+        }
+    </style>
 </head>
-<form>
-<input type="text" name="publication" placeholder="search" />
-<input type="submit" value="Submit" />
-</form>
 <body>
-    <h1>Latest Headlines</h1>
+<div id="header">
+    <h1>News & Weather App</h1>
+    <p>Headlines. Weather.</p>
+    <hr />
+</div>
 
-    {% if articles %}
-        {% for article in articles %}
-            <div style="margin-bottom: 30px;">
-                <h2>{{ article.title }}</h2>
-                <small><i>{{ article.published }}</i></small><br />
-                <p>{{ article.summary }}</p>
-                {% if article.link %}
-                    <a href="{{ article.link }}" target="_blank">Read more</a>
-                {% endif %}
-                <hr />
-            </div>
-        {% endfor %}
-    {% else %}
-        <p>No news available.</p>
-    {% endif %}
+<!-- Weather Form -->
+<h2>Search Weather</h2>
+<form method="get" action="/">
+    <input type="text" name="city" placeholder="Enter city name" value="{{ request.args.get('city', '') }}">
+    <input type="submit" value="Get Weather">
+</form>
+
+{% if weather %}
+    <h3>Current Weather</h3>
+    <p>City: <b>{{ weather.city }}, {{ weather.country }}</b></p>
+    <p>{{ weather.description }} | {{ weather.temperature }}℃</p>
+{% endif %}
+
+<!-- News Form -->
+<h2>Search News</h2>
+<form method="get" action="/">
+    <input type="text" name="publication" placeholder="Enter news source (e.g., bbc, cnn)" value="{{ request.args.get('publication', '') }}">
+    <input type="submit" value="Get News">
+</form>
+
+{% if articles %}
+    <h3>Top Headlines</h3>
+    <ul>
+    {% for article in articles %}
+        <li>
+            <a href="{{ article.link }}">{{ article.title }}</a><br>
+        </li>
+    {% endfor %}
+    </ul>
+{% elif publication %}
+    <p>No news articles found for "{{ publication }}".</p>
+{% endif %}
+
 </body>
 </html>
